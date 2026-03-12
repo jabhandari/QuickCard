@@ -1,0 +1,45 @@
+{
+  "fullName": "Juhi Abhay Bhandari",
+  "headline": "Software Developer",
+  "email": "juhi@example.com",
+  "phone": "+1 234 567 8901",
+  "location": "Toronto, ON",
+  "linkedin": "https://linkedin.com/in/juhibhandari",
+  "github": "https://github.com/jabhandari",
+  "portfolio": "https://jabhandari.github.io/",
+  "summary": "Motivated software developer with experience in web development, backend systems, and building user-focused applications.",
+  "skills": [
+    "JavaScript",
+    "React",
+    "Node.js",
+    "Express",
+    "MongoDB"
+  ],
+  "experience": [
+    {
+      "company": "Scotiabank",
+      "role": "Software Developer",
+      "startDate": "2025-12",
+      "endDate": "Present",
+      "description": [
+        "Worked on integration solutions for cash management systems.",
+        "Used IBM ACE and ESQL for backend message flows."
+      ]
+    }
+  ],
+  "education": [
+    {
+      "institution": "Seneca Polytechnic",
+      "program": "Computer Programming",
+      "startDate": "2023-09",
+      "endDate": "2025-04"
+    }
+  ],
+  "projects": [
+    {
+      "name": "Profile Wallet App",
+      "description": "A web app that generates a professional PDF profile and wallet-style digital card.",
+      "link": "https://github.com/jabhandari/profile-wallet-app"
+    }
+  ]
+}
