@@ -122,12 +122,29 @@ exports.generatePDF = async (req, res) => {
 }
 
 exports.passPreview = async (req, res) => {
+     try {
     const profile = req.body
-    const qr = await QRCode.toDataURL(profile.linkedin)
-    const preview = {
-        name: profile.fullName,
-        title: profile.headline,
-        quCode: qr
-    }
+
+    const qrTarget =
+      profile.linkedin ||
+      profile.portfolio ||
+      profile.github ||
+      "https://example.com"
+
+    const qrCode = await QRCode.toDataURL(qrTarget)
+
+    res.json({
+      name: profile.fullName,
+      title: profile.headline,
+      qrCode,
+      qrTarget
+    })
+  } catch (error) {
+    console.error("Pass preview error:", error)
+    res.status(500).json({
+      message: "Failed to generate pass preview",
+      error: error.message
+    })
+  }
     res.json(preview)
 }
