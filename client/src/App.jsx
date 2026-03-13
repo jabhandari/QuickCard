@@ -7,7 +7,10 @@ function App() {
     headline: "",
     summary: "",
     skills: "",
-    linkedin: ""
+    linkedin: "",
+    gitHub:"",
+    Email:"",
+    Resume:""
   })
 
   const [cardData, setCardData] = useState(null)
@@ -31,7 +34,10 @@ function App() {
         .split(",")
         .map((s) => s.trim())
         .filter((s) => s !== ""),
-      linkedin: form.linkedin
+      linkedin: form.linkedin,
+      gitHub: form.gitHub,
+      Email: form.Email,
+      Resume:form.Resume
     }
 
     try {
@@ -47,170 +53,173 @@ setCardData(passResponse.data)
   }
 
   return (
-    <div
-      style={{
-        minHeight: "100vh",
-        padding: "2rem",
-        fontFamily: "Arial",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center"
-      }}
-    >
-      <div
-        style={{
-          width: "100%",
-          maxWidth: "1200px",
-          margin: "0 auto"
-        }}
-      >
-        <h1 style={{ textAlign: "center", marginTop: 0, marginBottom: "4rem" }}>
-          QuickCard
-        </h1>
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "minmax(0, 1.4fr) minmax(280px, 0.9fr)",
-            gap: "3rem",
-            alignItems: "start"
-          }}
-        >
-          <form onSubmit={handleGenerate}>
-            <div className="space-y-12">
-              <div className="border-b border-gray-900/10 pb-12">
-                <h2 className="text-base/7 font-semibold text-gray-900">
-                  Enter your details
-                </h2>
-                <p className="mt-1 text-sm/6 text-gray-600">
-                  This information will be presented on your QuickCard.
-                </p>
+    <div className="app-shell">
+      <div className="app-backdrop" />
+      <main className="app-container">
+        <section className="hero-copy">
+          <span className="hero-tag">Digital profile kit</span>
+          <h1>QuickCard</h1>
+          <p>
+            Build a clean profile card and export a polished PDF version from the
+            same details.
+          </p>
+        </section>
 
-                <p className="mt-1 text-sm/6 text-gray-600">Enter your full name.</p>
+        <div className="workspace-grid">
+          <form className="editor-panel" onSubmit={handleGenerate}>
+            <div className="panel-header">
+              <h2>Enter your details</h2>
+              <p>This information will be presented on your QuickCard.</p>
+            </div>
+
+            <div className="form-grid">
+              <div className="field full-span">
+                <label htmlFor="fullName">Full name</label>
                 <input
                   id="fullName"
                   type="text"
                   name="fullName"
                   value={form.fullName}
                   onChange={handleChange}
-                  placeholder="abc"
-                  className="block min-w-0 grow bg-white py-1.5 pr-3 pl-1 text-base text-gray-900 placeholder:text-gray-400 focus:outline-none sm:text-sm/6"
+                  placeholder="Alex Johnson"
                 />
+              </div>
 
-                <p className="mt-1 text-sm/6 text-gray-600">Enter headline.</p>
+              <div className="field full-span">
+                <label htmlFor="headline">Headline</label>
                 <input
                   id="headline"
                   type="text"
                   name="headline"
                   value={form.headline}
                   onChange={handleChange}
-                  placeholder="abc"
-                  className="block min-w-0 grow bg-white py-1.5 pr-3 pl-1 text-base text-gray-900 placeholder:text-gray-400 focus:outline-none sm:text-sm/6"
+                  placeholder="Product designer and frontend developer"
                 />
+              </div>
 
-                <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
-                  <div className="sm:col-span-4">
-                    <p className="mt-1 text-sm/6 text-gray-600">
-                      Quick summary about yourself.
-                    </p>
-                    <input
-                      id="summary"
-                      type="text"
-                      name="summary"
-                      value={form.summary}
-                      onChange={handleChange}
-                      placeholder="abc"
-                      className="block min-w-0 grow bg-white py-1.5 pr-3 pl-1 text-base text-gray-900 placeholder:text-gray-400 focus:outline-none sm:text-sm/6"
-                    />
-                  </div>
+              <div className="field full-span">
+                <label htmlFor="summary">Summary</label>
+                <input
+                  id="summary"
+                  type="text"
+                  name="summary"
+                  value={form.summary}
+                  onChange={handleChange}
+                  placeholder="A short introduction about your work and strengths"
+                />
+              </div>
 
-                  <div className="sm:col-span-4">
-                    <p className="mt-1 text-sm/6 text-gray-600">Enter your skills.</p>
-                    <div className="mt-2">
-                      <textarea
-                        id="skills"
-                        name="skills"
-                        rows="3"
-                        value={form.skills}
-                        onChange={handleChange}
-                        placeholder="Separated with commas"
-                        className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
-                      ></textarea>
-                    </div>
-                  </div>
+              <div className="field full-span">
+                <label htmlFor="skills">Skills</label>
+                <textarea
+                  id="skills"
+                  name="skills"
+                  rows="4"
+                  value={form.skills}
+                  onChange={handleChange}
+                  placeholder="React, UI Design, Node.js, Figma"
+                ></textarea>
+              </div>
 
-                  <div className="sm:col-span-4">
-                    <p className="mt-1 text-sm/6 text-gray-600">Enter LinkedIn URL.</p>
-                    <input
-                      id="linkedin"
-                      type="text"
-                      name="linkedin"
-                      value={form.linkedin}
-                      onChange={handleChange}
-                      placeholder="https://linkedin.com/in/your-profile"
-                      className="block min-w-0 grow bg-white py-1.5 pr-3 pl-1 text-base text-gray-900 placeholder:text-gray-400 focus:outline-none sm:text-sm/6"
-                    />
-                  </div>
-                </div>
+              <div className="field">
+                <label htmlFor="linkedin">LinkedIn</label>
+                <input
+                  id="linkedin"
+                  type="text"
+                  name="linkedin"
+                  value={form.linkedin}
+                  onChange={handleChange}
+                  placeholder="https://linkedin.com/in/your-profile"
+                />
+              </div>
+
+              <div className="field">
+                <label htmlFor="gitHub">GitHub</label>
+                <input
+                  id="gitHub"
+                  type="text"
+                  name="gitHub"
+                  value={form.gitHub}
+                  onChange={handleChange}
+                  placeholder="https://github.com/your-profile"
+                />
+              </div>
+
+              <div className="field">
+                <label htmlFor="Email">Email</label>
+                <input
+                  id="Email"
+                  type="email"
+                  name="Email"
+                  value={form.Email}
+                  onChange={handleChange}
+                  placeholder="example@email.com"
+                />
+              </div>
+
+              <div className="field">
+                <label htmlFor="Resume">Resume</label>
+                <input
+                  id="Resume"
+                  type="text"
+                  name="Resume"
+                  value={form.Resume}
+                  onChange={handleChange}
+                  placeholder="https://resume-url"
+                />
               </div>
             </div>
 
-            <br />
-            <br />
-            <button
-              type="submit"
-              style={{
-                marginTop: "24px",
-                background: "linear-gradient(to right, #4f46e5, #7c3aed)",
-                color: "white",
-                padding: "12px 24px",
-                border: "none",
-                borderRadius: "12px",
-                fontSize: "14px",
-                fontWeight: "600",
-                cursor: "pointer",
-                boxShadow: "0 10px 20px rgba(79, 70, 229, 0.25)"
-              }}
-            >
+            <button className="primary-button" type="submit">
               Generate QuickCard
             </button>
           </form>
 
-          <div
-            style={{
-              minHeight: "320px",
-              padding: "1.5rem",
-              borderRadius: "20px",
-              backgroundColor: "rgba(255,255,255,0.7)",
-              boxShadow: "0 18px 40px rgba(15, 23, 42, 0.08)",
-              position: "sticky",
-              top: "2rem"
-            }}
-          >
-            <h2 style={{ marginTop: 0 }}>Result</h2>
+          <aside className="result-panel">
+            <div className="result-header">
+              <span className="result-badge">Preview</span>
+              <h2>Result</h2>
+              <p>Live output for your generated card and downloadable PDF.</p>
+            </div>
+
             {!cardData && !pdfUrl && (
-              <p style={{ color: "#475569" }}>
-                Generate your QuickCard to see the preview here.
-              </p>
+              <div className="empty-state">
+                <div className="empty-state-orb" />
+                <h3>No card yet</h3>
+                <p>Submit the form to generate your QR card preview and PDF link.</p>
+              </div>
             )}
 
             {cardData && (
-              <div style={{ marginTop: "1rem" }}>
-                <h3 style={{ marginBottom: "0.5rem" }}>{cardData.name}</h3>
-                <p style={{ marginTop: 0 }}>{cardData.title}</p>
-                <img src={cardData.qrCode} alt="QR Code" width="150" />
+              <div className="preview-card">
+                <div className="preview-card-top">
+                  <div>
+                    <span className="preview-label">Profile</span>
+                    <h3>{cardData.name}</h3>
+                    <p>{cardData.title}</p>
+                  </div>
+                  <div className="preview-qr-wrap">
+                    <img src={cardData.qrCode} alt="QR Code" width="144" />
+                  </div>
+                </div>
               </div>
             )}
 
             {pdfUrl && (
-              <div style={{ marginTop: "1rem" }}>
-                <a href={pdfUrl} target="_blank" rel="noreferrer">
+              <div className="pdf-panel">
+                <div>
+                  <span className="preview-label">Export</span>
+                  <h3>Profile PDF ready</h3>
+                  <p>Open the generated PDF in a new tab.</p>
+                </div>
+                <a className="pdf-link" href={pdfUrl} target="_blank" rel="noreferrer">
                   Open PDF
                 </a>
               </div>
             )}
-          </div>
+          </aside>
         </div>
-      </div>
+      </main>
     </div>
   )
 }
