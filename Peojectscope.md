@@ -51,3 +51,15 @@ The system will generate:
 - Offer multiple resume/card templates
 - Allow users to update and save multiple profile versions
 - Build a mobile app version
+
+
+
+
+##improvements
+-wallet pass generator (prototype)
+-get the QR point to the actual card
+-sharable profile link
+-host online
+-improve pdf add sections-education,experience,etc
+-allow to choose from multiple templates
+-save profiles (DB)
