@@ -55,11 +55,12 @@ The system will generate:
 
 
 
-##improvements
--wallet pass generator (prototype)
--get the QR point to the actual card
--sharable profile link
--host online
--improve pdf add sections-education,experience,etc
--allow to choose from multiple templates
--save profiles (DB)
+## Improvements
+
+- Wallet pass generator (prototype)
+- Get the QR code to point to the actual card
+- Shareable profile link
+- Host online
+- Improve PDF sections: education, experience, etc.
+- Allow users to choose from multiple templates
+- Save profiles (DB)
