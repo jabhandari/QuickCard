@@ -51,8 +51,9 @@
 # About The Project
 
 <p align="center">
-  <img src="./screenshots/quickcard-preview.png" alt="QuickCard Screenshot">
+  <img src="./public/img1.png" alt="QuickCard Screenshot">
 </p>
+
 
 **QuickCard** is a full-stack web application that allows users to generate a **digital networking card** with a QR code and downloadable resume.
 
@@ -67,6 +68,9 @@ With QuickCard, users can:
 
 This project demonstrates a **modern full-stack architecture** with a React frontend and a Node.js/Express backend that dynamically generates QR codes and PDFs.
 
+<p align="center">
+  <img src="./public/img2.png" alt="QuickCard Screenshot">
+</p>
 ---
 
 # Built With
@@ -112,7 +116,7 @@ Includes:
 ## QR Code Identity Sharing
 
 <p align="center">
-  <img src="./screenshots/qr-preview.png" alt="QR Code">
+  <img src="./public/img3.png" alt="QR Code">
 </p>
 
 Each QuickCard generates a **QR code** that links directly to the user's professional profile or portfolio.
@@ -131,7 +135,9 @@ Simply scan and connect.
 ## Resume PDF Generation
 
 Users can generate a **downloadable PDF resume** directly from their profile data.
-
+<p align="center">
+  <img src="./public/img4.png" alt="QR Code">
+</p>
 Features:
 
 - Dynamic HTML template
@@ -173,7 +179,11 @@ quickcard
 |   |-- wallet/
 |   |-- output/
 |   `-- server.js
-`-- screenshots/     # README screenshots
+`-- public/          # README images
+    |-- img1.png
+    |-- img2.png
+    |-- img3.png
+    `-- img4.png
 ```
 
 ---
