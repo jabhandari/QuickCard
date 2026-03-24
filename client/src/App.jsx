@@ -1,7 +1,5 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { api } from "./api/api"
-
-const apiBaseUrl = import.meta.env.VITE_API_BASE_URL || ""
 
 function App() {
   const [form, setForm] = useState({
@@ -19,6 +17,14 @@ function App() {
   const [pdfUrl, setPdfUrl] = useState("")
   const [errorMessage, setErrorMessage] = useState("")
 
+  useEffect(() => {
+    return () => {
+      if (pdfUrl) {
+        URL.revokeObjectURL(pdfUrl)
+      }
+    }
+  }, [pdfUrl])
+
   const handleChange = (e) => {
     setForm({
       ...form,
@@ -29,6 +35,11 @@ function App() {
   const handleGenerate = async (e) => {
     e.preventDefault()
     setErrorMessage("")
+
+    if (pdfUrl) {
+      URL.revokeObjectURL(pdfUrl)
+      setPdfUrl("")
+    }
 
     const profile = {
       fullName: form.fullName,
@@ -48,12 +59,12 @@ function App() {
       const passResponse = await api.post("/pass-preview", profile)
       setCardData(passResponse.data)
 
-      const pdfResponse = await api.post("/generate-pdf", profile)
-      const resolvedPdfUrl = apiBaseUrl
-        ? `${apiBaseUrl}${pdfResponse.data.file}`
-        : pdfResponse.data.file
+      const pdfResponse = await api.post("/generate-pdf", profile, {
+        responseType: "blob"
+      })
+      const blobUrl = URL.createObjectURL(pdfResponse.data)
 
-      setPdfUrl(resolvedPdfUrl)
+      setPdfUrl(blobUrl)
     } catch (error) {
       console.error(error)
       setPdfUrl("")
