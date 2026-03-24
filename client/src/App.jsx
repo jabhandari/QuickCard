@@ -1,6 +1,8 @@
 import { useState } from "react"
 import { api } from "./api/api"
 
+const apiBaseUrl = import.meta.env.VITE_API_BASE_URL || ""
+
 function App() {
   const [form, setForm] = useState({
     fullName: "",
@@ -15,6 +17,7 @@ function App() {
 
   const [cardData, setCardData] = useState(null)
   const [pdfUrl, setPdfUrl] = useState("")
+  const [errorMessage, setErrorMessage] = useState("")
 
   const handleChange = (e) => {
     setForm({
@@ -25,6 +28,7 @@ function App() {
 
   const handleGenerate = async (e) => {
     e.preventDefault()
+    setErrorMessage("")
 
     const profile = {
       fullName: form.fullName,
@@ -42,13 +46,20 @@ function App() {
 
     try {
       const passResponse = await api.post("/pass-preview", profile)
-console.log("pass preview response:", passResponse.data)
-setCardData(passResponse.data)
+      setCardData(passResponse.data)
 
       const pdfResponse = await api.post("/generate-pdf", profile)
-      setPdfUrl(pdfResponse.data.file)
+      const resolvedPdfUrl = apiBaseUrl
+        ? `${apiBaseUrl}${pdfResponse.data.file}`
+        : pdfResponse.data.file
+
+      setPdfUrl(resolvedPdfUrl)
     } catch (error) {
       console.error(error)
+      setPdfUrl("")
+      setErrorMessage(
+        error.response?.data?.message || "Could not generate your PDF locally."
+      )
     }
   }
 
@@ -215,6 +226,16 @@ setCardData(passResponse.data)
                 <a className="pdf-link" href={pdfUrl} target="_blank" rel="noreferrer">
                   Open PDF
                 </a>
+              </div>
+            )}
+
+            {errorMessage && (
+              <div className="pdf-panel">
+                <div>
+                  <span className="preview-label">Error</span>
+                  <h3>Generation failed</h3>
+                  <p>{errorMessage}</p>
+                </div>
               </div>
             )}
           </aside>

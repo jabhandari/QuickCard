@@ -1,24 +1,24 @@
-
-const puppeter = require("puppeteer")
+const puppeteer = require("puppeteer")
 const fs = require("fs")
 const path = require("path")
 const QRCode = require("qrcode")
-const { error } = require("console")
 
-exports.generatePDF = async (req, res) => {
+const outputDir = path.join(__dirname, "../output")
 
-    try {
+function getQrTarget(profile = {}) {
+    return (
+        profile.linkedin ||
+        profile.portfolio ||
+        profile.gitHub ||
+        profile.github ||
+        "https://example.com"
+    )
+}
 
-        const profile = req.body
+function buildHtml(profile, qrCodeDataUrl) {
+    const skills = Array.isArray(profile.skills) ? profile.skills : []
 
-        const qrTarget =
-            profile.linkedin ||
-            profile.portfolio ||
-            profile.github ||
-            "https://example.com"
-        const qrCodeDataUrl = await QRCode.toDataURL(qrTarget)
-
-        const html = `
+    return `
 <html>
 <head>
     <meta charset="UTF-8" />
@@ -62,8 +62,8 @@ exports.generatePDF = async (req, res) => {
                         <div class="inline-flex rounded-full border border-white/20 bg-white/10 px-4 py-2 text-[11px] font-bold uppercase tracking-[0.24em] text-slate-100">
                             QuickCard Profile
                         </div>
-                        <h1 class="mt-4 text-[42px] font-black tracking-[-0.06em] leading-tight">${profile.fullName}</h1>
-                        <p class="mt-3 max-w-2xl text-base leading-7 text-sky-50/90">${profile.headline}</p>
+                        <h1 class="mt-4 text-[42px] font-black tracking-[-0.06em] leading-tight">${profile.fullName || ""}</h1>
+                        <p class="mt-3 max-w-2xl text-base leading-7 text-sky-50/90">${profile.headline || ""}</p>
 
                         <div class="mt-5 flex flex-wrap gap-2.5">
                             ${profile.linkedin ? `
@@ -111,7 +111,7 @@ exports.generatePDF = async (req, res) => {
                                 About
                             </div>
                         </div>
-                        <p class="text-[14px] leading-7 text-inkSoft">${profile.summary}</p>
+                        <p class="text-[14px] leading-7 text-inkSoft">${profile.summary || ""}</p>
                     </section>
 
                     <section class="break-inside-avoid rounded-[28px] border border-line bg-white p-6">
@@ -125,15 +125,13 @@ exports.generatePDF = async (req, res) => {
                             </div>
                         </div>
                         <div class="flex flex-wrap gap-3">
-                            ${profile.skills.map(skill => `
+                            ${skills.map((skill) => `
                                 <span class="rounded-full border border-line bg-panelSoft px-4 py-2 text-xs font-semibold text-slate-700">
                                     ${skill}
                                 </span>
                             `).join("")}
                         </div>
                     </section>
-
-                   
                 </div>
 
                 <aside class="space-y-6">
@@ -144,52 +142,50 @@ exports.generatePDF = async (req, res) => {
                                 Reach out
                             </div>
                         </div>
-                       <div class="mt-5 flex flex-wrap gap-3">
-  ${profile.linkedin ? `
-    <a
-      href="${profile.linkedin}"
-      target="_blank"
-      rel="noopener noreferrer"
-      class="inline-flex items-center rounded-full border border-white bg-white/80 px-4 py-2 text-sm font-medium text-inkSoft shadow-sm transition hover:bg-white"
-    >
-      LinkedIn
-    </a>
-  ` : ""}
+                        <div class="mt-5 flex flex-wrap gap-3">
+                            ${profile.linkedin ? `
+                                <a
+                                  href="${profile.linkedin}"
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  class="inline-flex items-center rounded-full border border-white bg-white/80 px-4 py-2 text-sm font-medium text-inkSoft shadow-sm transition hover:bg-white"
+                                >
+                                  LinkedIn
+                                </a>
+                            ` : ""}
 
-  ${profile.gitHub ? `
-    <a
-      href="${profile.gitHub}"
-      target="_blank"
-      rel="noopener noreferrer"
-      class="inline-flex items-center rounded-full border border-white bg-white/80 px-4 py-2 text-sm font-medium text-inkSoft shadow-sm transition hover:bg-white"
-    >
-      GitHub
-    </a>
-  ` : ""}
+                            ${profile.gitHub ? `
+                                <a
+                                  href="${profile.gitHub}"
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  class="inline-flex items-center rounded-full border border-white bg-white/80 px-4 py-2 text-sm font-medium text-inkSoft shadow-sm transition hover:bg-white"
+                                >
+                                  GitHub
+                                </a>
+                            ` : ""}
 
-  ${profile.Email ? `
-    <a
-      href="mailto:${profile.Email}"
-      class="inline-flex items-center rounded-full border border-white bg-white/80 px-4 py-2 text-sm font-medium text-inkSoft shadow-sm transition hover:bg-white"
-    >
-      Email
-    </a>
-  ` : ""}
+                            ${profile.Email ? `
+                                <a
+                                  href="mailto:${profile.Email}"
+                                  class="inline-flex items-center rounded-full border border-white bg-white/80 px-4 py-2 text-sm font-medium text-inkSoft shadow-sm transition hover:bg-white"
+                                >
+                                  Email
+                                </a>
+                            ` : ""}
 
-  ${profile.Resume ? `
-    <a
-      href="${profile.Resume}"
-      target="_blank"
-      rel="noopener noreferrer"
-      class="inline-flex items-center rounded-full border border-white bg-white/80 px-4 py-2 text-sm font-medium text-inkSoft shadow-sm transition hover:bg-white"
-    >
-      Resume
-    </a>
-  ` : ""}
-</div>
+                            ${profile.Resume ? `
+                                <a
+                                  href="${profile.Resume}"
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  class="inline-flex items-center rounded-full border border-white bg-white/80 px-4 py-2 text-sm font-medium text-inkSoft shadow-sm transition hover:bg-white"
+                                >
+                                  Resume
+                                </a>
+                            ` : ""}
+                        </div>
                     </section>
-
-                   
                 </aside>
             </div>
         </section>
@@ -197,29 +193,41 @@ exports.generatePDF = async (req, res) => {
 </body>
 </html>
 `
+}
 
-        const filePath = path.join(__dirname, "../output/profile.pdf")
-        const browser = await puppeter.launch()
-        const page = await browser.newPage()
-        await page.setContent(html)
+exports.generatePDF = async (req, res) => {
+    try {
+        const profile = req.body
+        const qrTarget = getQrTarget(profile)
+        const qrCodeDataUrl = await QRCode.toDataURL(qrTarget)
+        const html = buildHtml(profile, qrCodeDataUrl)
 
-        await page.pdf({
-            path: filePath,
-            format: "A4",
-            printBackground: true
-        })
+        fs.mkdirSync(outputDir, { recursive: true })
 
-        await browser.close()
+        const fileName = `profile-${Date.now()}.pdf`
+        const filePath = path.join(outputDir, fileName)
+        const browser = await puppeteer.launch()
+
+        try {
+            const page = await browser.newPage()
+            await page.setContent(html, { waitUntil: "networkidle0" })
+            await page.pdf({
+                path: filePath,
+                format: "A4",
+                printBackground: true
+            })
+        } finally {
+            await browser.close()
+        }
 
         res.json({
-            message: "PDF generated sucessfully",
-            file: "/output/profile.pdf",
+            message: "PDF generated successfully",
+            file: `/output/${fileName}`,
             qrTarget
         })
-
-    } catch (erro) {
-        console.error("PDF generation error: ", error)
-        res.status(500), json({
+    } catch (error) {
+        console.error("PDF generation error:", error)
+        res.status(500).json({
             message: "Failed to generate PDF",
             error: error.message
         })
@@ -229,13 +237,7 @@ exports.generatePDF = async (req, res) => {
 exports.passPreview = async (req, res) => {
     try {
         const profile = req.body
-
-        const qrTarget =
-            profile.linkedin ||
-            profile.portfolio ||
-            profile.github ||
-            "https://example.com"
-
+        const qrTarget = getQrTarget(profile)
         const qrCode = await QRCode.toDataURL(qrTarget)
 
         res.json({
@@ -251,5 +253,4 @@ exports.passPreview = async (req, res) => {
             error: error.message
         })
     }
-    res.json(preview)
 }
