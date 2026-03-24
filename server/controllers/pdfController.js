@@ -1,9 +1,5 @@
 const puppeteer = require("puppeteer")
-const fs = require("fs")
-const path = require("path")
 const QRCode = require("qrcode")
-
-const outputDir = path.join(__dirname, "../output")
 
 function getQrTarget(profile = {}) {
     return (
@@ -195,36 +191,46 @@ function buildHtml(profile, qrCodeDataUrl) {
 `
 }
 
+function getDownloadFileName(profile = {}) {
+    const baseName = (profile.fullName || "quickcard-profile")
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, "-")
+        .replace(/^-+|-+$/g, "")
+
+    return `${baseName || "quickcard-profile"}.pdf`
+}
+
+async function launchBrowser() {
+    return puppeteer.launch({
+        headless: true,
+        args: ["--no-sandbox", "--disable-setuid-sandbox"]
+    })
+}
+
 exports.generatePDF = async (req, res) => {
     try {
         const profile = req.body
         const qrTarget = getQrTarget(profile)
         const qrCodeDataUrl = await QRCode.toDataURL(qrTarget)
         const html = buildHtml(profile, qrCodeDataUrl)
-
-        fs.mkdirSync(outputDir, { recursive: true })
-
-        const fileName = `profile-${Date.now()}.pdf`
-        const filePath = path.join(outputDir, fileName)
-        const browser = await puppeteer.launch()
+        const fileName = getDownloadFileName(profile)
+        const browser = await launchBrowser()
 
         try {
             const page = await browser.newPage()
             await page.setContent(html, { waitUntil: "networkidle0" })
-            await page.pdf({
-                path: filePath,
+            const pdfBuffer = await page.pdf({
                 format: "A4",
                 printBackground: true
             })
+
+            res.setHeader("Content-Type", "application/pdf")
+            res.setHeader("Content-Disposition", `inline; filename="${fileName}"`)
+            res.setHeader("X-QuickCard-QR-Target", qrTarget)
+            res.send(pdfBuffer)
         } finally {
             await browser.close()
         }
-
-        res.json({
-            message: "PDF generated successfully",
-            file: `/output/${fileName}`,
-            qrTarget
-        })
     } catch (error) {
         console.error("PDF generation error:", error)
         res.status(500).json({
