@@ -203,6 +203,7 @@ function getDownloadFileName(profile = {}) {
 async function launchBrowser() {
   return puppeteer.launch({
     headless: "new",
+    executablePath: puppeteer.executablePath(),
     args: [
       "--no-sandbox",
       "--disable-setuid-sandbox",
@@ -211,7 +212,6 @@ async function launchBrowser() {
     ]
   });
 }
-
 exports.generatePDF = async (req, res) => {
     try {
         const profile = req.body
