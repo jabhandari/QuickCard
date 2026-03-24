@@ -201,10 +201,15 @@ function getDownloadFileName(profile = {}) {
 }
 
 async function launchBrowser() {
-    return puppeteer.launch({
-        headless: true,
-        args: ["--no-sandbox", "--disable-setuid-sandbox"]
-    })
+  return puppeteer.launch({
+    headless: "new",
+    args: [
+      "--no-sandbox",
+      "--disable-setuid-sandbox",
+      "--disable-dev-shm-usage",
+      "--single-process"
+    ]
+  });
 }
 
 exports.generatePDF = async (req, res) => {
