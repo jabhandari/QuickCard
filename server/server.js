@@ -16,7 +16,18 @@ const PORT = process.env.PORT || 5000
 
 app.use(cors({
     origin(origin, callback) {
-        if (!origin || allowedOrigins.includes(origin)) {
+        if (!origin) {
+            callback(null, true)
+            return
+        }
+
+        if (allowedOrigins.includes(origin)) {
+            callback(null, true)
+            return
+        }
+
+        // Allow any Vercel preview deployment URL for this project
+        if (origin.endsWith(".vercel.app")) {
             callback(null, true)
             return
         }
