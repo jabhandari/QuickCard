@@ -1,5 +1,9 @@
-const puppeteer = require("puppeteer")
+const puppeteer = require("puppeteer-core")
+const chromium = require("@sparticuz/chromium")
 const QRCode = require("qrcode")
+
+// On local dev, fall back to a locally installed Chrome
+const isLocal = !process.env.RENDER
 
 function getQrTarget(profile = {}) {
     return (
@@ -201,16 +205,21 @@ function getDownloadFileName(profile = {}) {
 }
 
 async function launchBrowser() {
+  if (isLocal) {
+    // Use the full puppeteer package's bundled Chrome for local dev
+    const localPuppeteer = require("puppeteer")
+    return localPuppeteer.launch({
+      headless: "new",
+      args: ["--no-sandbox", "--disable-setuid-sandbox"]
+    })
+  }
+
+  // Cloud/Render: use @sparticuz/chromium
   return puppeteer.launch({
-    headless: "new",
-    executablePath: puppeteer.executablePath(),
-    args: [
-      "--no-sandbox",
-      "--disable-setuid-sandbox",
-      "--disable-dev-shm-usage",
-      "--single-process"
-    ]
-  });
+    headless: chromium.headless,
+    executablePath: await chromium.executablePath(),
+    args: chromium.args
+  })
 }
 exports.generatePDF = async (req, res) => {
     try {

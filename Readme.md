@@ -27,7 +27,6 @@
 <p align="center">
   <img src="https://img.shields.io/badge/React-Vite-blue" />
   <img src="https://img.shields.io/badge/Node.js-Express-green" />
-  <img src="https://img.shields.io/badge/QR-Code-Generator-black" />
   <img src="https://img.shields.io/badge/PDF-Generator-red" />
   <img src="https://img.shields.io/badge/Fullstack-JavaScript-yellow" />
 </p>
