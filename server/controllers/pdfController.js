@@ -201,14 +201,17 @@ function getDownloadFileName(profile = {}) {
 }
 
 async function launchBrowser() {
+  const execPath = puppeteer.executablePath()
+  console.log("Launching Chrome from:", execPath)
   return puppeteer.launch({
     headless: "new",
-    executablePath: puppeteer.executablePath(),
+    executablePath: execPath,
     args: [
       "--no-sandbox",
       "--disable-setuid-sandbox",
       "--disable-dev-shm-usage",
-      "--disable-gpu"
+      "--disable-gpu",
+      "--disable-extensions"
     ]
   })
 }
