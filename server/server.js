@@ -43,6 +43,16 @@ app.get("/health", (req, res) => {
     res.json({ status: "server running" })
 })
 
-app.listen(PORT, () => {
+app.listen(PORT, "0.0.0.0", () => {
     console.log(`Server running on port ${PORT}`)
+})
+
+process.on("uncaughtException", (err) => {
+    console.error("Uncaught exception:", err)
+    process.exit(1)
+})
+
+process.on("unhandledRejection", (reason) => {
+    console.error("Unhandled rejection:", reason)
+    process.exit(1)
 })
