@@ -16,9 +16,6 @@
   <a href="https://github.com/jabhandari/quickcard">View Code</a>
   -
   <a href="https://github.com/jabhandari/quickcard/issues">Report Bug</a>
-  -
-  <a href="https://github.com/jabhandari/quickcard/issues">Request Feature</a>
-</p>
 
 <p align="center">
   <b>Frontend built with React + Vite and backend powered by Node.js + Express.</b>
