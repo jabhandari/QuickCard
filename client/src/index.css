@@ -234,6 +234,16 @@ textarea {
   line-height: 1.6;
 }
 
+.preview-card small {
+  display: block;
+  max-width: 32ch;
+  margin-top: 8px;
+  color: #64748b;
+  font-size: 0.78rem;
+  line-height: 1.5;
+  overflow-wrap: anywhere;
+}
+
 .empty-state-orb {
   width: 52px;
   height: 52px;
