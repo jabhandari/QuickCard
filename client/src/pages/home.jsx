@@ -294,7 +294,7 @@ function Home() {
                   rows="3"
                   value={form.education}
                   onChange={handleChange}
-                  placeholder="Seneca Polytechnic | Computer Programming | 2023-09 - 2025-04"
+                  placeholder=" Example University | Example Degree | years attended | Additional details like GPA or honors"
                 />
               </div>
 
@@ -306,7 +306,7 @@ function Home() {
                   rows="4"
                   value={form.experience}
                   onChange={handleChange}
-                  placeholder="Scotiabank | Software Developer | 2025-12 - Present | Built integration flows for cash management systems"
+                  placeholder=" Example Company | Example Position | 2023-09 - 2025-04 | Description of responsibilities and achievements"
                 />
               </div>
 
@@ -318,7 +318,7 @@ function Home() {
                   rows="3"
                   value={form.projects}
                   onChange={handleChange}
-                  placeholder="Profile Wallet App | Generates a PDF profile and wallet-style card | https://github.com/example/project"
+                  placeholder=" Example Project | Description | https://github.com/example/project"
                 />
               </div>
             </div>
